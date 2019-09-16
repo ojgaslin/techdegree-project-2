@@ -3,7 +3,6 @@
 //** Global variable itemsPerPage is equal to ten because there should be ten names shown for each page
 const studentList = document.getElementsByClassName('student-item');
 const itemsPerPage = 10;
-
 //Create the `showPage` function to hide all of the items in the
 //list except for the ten you want to show.
 
@@ -17,6 +16,10 @@ const itemsPerPage = 10;
 function showPage (list, page) {
   let startIndex = (page * itemsPerPage) - itemsPerPage;
   let endIndex = page * itemsPerPage - 1;
+  //retrieved h3 element with class name no-match. Set to not display unless list length is not greater than zero.
+  let h3 = document.getElementsByClassName("no-match")[0];
+  h3.style.display = 'none';
+if(list.length > 0) {
   for (let i = 0; i < list.length; i++) {
     if(i >= startIndex && i <= endIndex)
     {
@@ -25,10 +28,26 @@ function showPage (list, page) {
     else {
       list[i].style.display = 'none';
     }
-  }
+} } else {
+      h3.style.display = 'block';
+}
+
+}
+//function created to make html element "No Match Found." and set to not display.
+function CreateNoMatchElement () {
+    let h3 = document.createElement('h3');
+    h3.setAttribute("class", "no-match");
+    h3.innerHTML = "No Match Found.";
+    h3.style.font = "italic 20px Helvetica";
+    h3.style.color = "rgb(128,128,128)";
+    h3.style.display = 'none';
+    document.getElementsByClassName("page")[0].appendChild(h3);
+
 }
 //**the "showPage" function is to be executed after the page has been loaded
 window.onload = function () {
+
+  CreateNoMatchElement();
   appendPageLinks(studentList);
   showPage (studentList, 1);
   createSearchField();
@@ -61,7 +80,7 @@ function appendPageLinks(list){
     //after the if statement, the 'a' element is given two components, the link/URL and the clickable text content of 'i.'
     a.href = "#";
     a.textContent = i;
-    //the event listener responds to a click event of the textContent of an 'a' element,
+    //the event listener responds to a click event of the textContent of an 'a' element.
     a.addEventListener ("click", (e)=> {
       showPage(list, e.target.textContent);
       const pageLinks = document.getElementsByTagName("a");
@@ -91,7 +110,7 @@ function createSearchField () {
   //give div class name
   div.className = 'student-search';
   //give input element placeholder text to show in search field
-  input.setAttribute("placeholder", "Search for students...")
+  input.setAttribute("placeholder", "Search for students...");
   //create button element
   let button = document.createElement('button');
   //set button text content to search
@@ -135,7 +154,7 @@ function searchNames() {
       searchResults.push(studentList[i]);
     }
   }
-  //functions are declared to present search results list 
+  //functions are declared to present search results list
   setAllNamesDisplayNone();
   clearPagination();
   appendPageLinks(searchResults);
